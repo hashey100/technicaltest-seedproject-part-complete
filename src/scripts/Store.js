@@ -15,7 +15,24 @@ class Store extends Observable {
   }
 
   filter() {
-    return this.state.deals;
+    let productFilters = this.state.productFilters;
+    let deals = this.state.deals;
+
+    // Verify the array exists before filtering data
+    if (productFilters.length != 0) {
+      // Filter function checking the deals and making sure Iphone is not included
+        deals = deals.filter((deal) => {
+          const results = deal.productTypes.filter(type => type !== 'Phone');
+          // Mapping the results and conditionality filtering out broadband
+          const filteredResults = results.map((e) => {
+            return e.toLowerCase().indexOf('broadband') > -1 ? 'broadband' : e.toLowerCase();
+          });
+          // Checking if the sorted results are the same
+          return filteredResults.sort().join(',') === productFilters.join(',');
+        });
+    }
+
+    return deals;
   }
 
   setDeals(data) {
