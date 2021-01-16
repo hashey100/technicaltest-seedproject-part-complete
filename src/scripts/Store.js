@@ -16,6 +16,7 @@ class Store extends Observable {
 
   filter() {
     let productFilters = this.state.productFilters;
+    let providerFilters = this.state.providerFilter;
     let deals = this.state.deals;
 
     // Verify the array exists before filtering data
@@ -30,6 +31,12 @@ class Store extends Observable {
           // Checking if the sorted results are the same
           return filteredResults.sort().join(',') === productFilters.join(',');
         });
+    }
+
+    // Verify that the providerFilter is valid before results are filtered again
+    if (providerFilters != null) {
+      // Check the deals provider ID against the providerFilter which has been selected
+      deals = deals.filter((deal) => deal.provider.id === providerFilters);
     }
 
     return deals;
